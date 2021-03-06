@@ -1,29 +1,30 @@
-document.addEventListener("keydown", handleKeyDownEvent)
+keyboard_listener = createKeyboardListener()
+keyboard_listener.subscribe(game.movePlayer)
+function createKeyboardListener(){
 
-current_player_id = current_player_id
-game_data = game_data
-acceptedMoves = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"]
+    const state = {
+        observers: []
+    }
 
-const moveFunction = {
-    "ArrowUp": ()=>{
-        if (game_data.players[current_player_id].positionY>0) 
-            game_data.players[current_player_id].positionY-=1
-    },
-    "ArrowDown": ()=>{
-        if (game_data.players[current_player_id].positionY<9)
-            game_data.players[current_player_id].positionY+=1
-    },
-    "ArrowLeft": ()=>{
-        if (game_data.players[current_player_id].positionX>0)
-            game_data.players[current_player_id].positionX-=1
-    },
-    "ArrowRight": ()=>{
-        if (game_data.players[current_player_id].positionX<9)
-            game_data.players[current_player_id].positionX+=1
-    } 
+    function subscribe(observerFunction){
+        state.observers.push(observerFunction)
+    }
+
+    function notifyAll(command){
+        for (const observerFunction of state.observers){
+            observerFunction(command)
+        }
+    }
+    document.addEventListener("keydown", handleKeyDownEvent)
+    
+
+    function handleKeyDownEvent(event){
+        command = {keyPressed:event.key, playerId:game.state.me.id}
+        notifyAll(command)
+    }
+
+    return {
+        subscribe
+    }
 }
 
-function handleKeyDownEvent(event){
-    if (acceptedMoves.includes(event.key))
-        moveFunction[event.key]()
-}

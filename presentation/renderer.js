@@ -4,8 +4,8 @@ const context  = screen.getContext("2d")
 renderScreen()
 function renderScreen(){
     clearScreen()
-    renderObjetcs(game_data.players, "black")
-    renderObjetcs(game_data.fruits, "green")
+    renderObjetcs(game.state.players, "black")
+    renderObjetcs(game.state.fruits, "green")
     requestAnimationFrame(renderScreen)
 }
 
