@@ -1,7 +1,8 @@
 from models import GameObjectBuilder
+from random import randint
 import constants
-import asyncio
-
+import threading
+import time
 
 class Command:
     pass
@@ -9,11 +10,13 @@ class Command:
 
 class Game:
     def __init__(self):
+        self.game_started = False
         self.observers = []
         self.state = {
             "players": [],
             "fruits": [],
         }
+        self.add_periodic_fruit()
 
     async def notify_all(self, command):
 
@@ -36,6 +39,13 @@ class Game:
     async def add_fruit(self, fruit_id, position_x, position_y):
         self.state["fruits"].append(GameObjectBuilder.makeObject(constants.FRUIT, fruit_id, position_x, position_y))
         await self.notify_all({"type": "add_fruit", "state": self.game_state_to_dict()})
+
+    def add_fruit_sync(self, fruit_id, position_x, position_y):
+        self.state["fruits"].append(GameObjectBuilder.makeObject(constants.FRUIT, fruit_id, position_x, position_y))
+
+    def add_periodic_fruit(self):
+        self.add_fruit_sync("fruit{}".format(randint(1, 100)), randint(0, 9), randint(0, 9))
+        threading.Timer(3, self.add_periodic_fruit).start()
 
     async def remove_fruit(self, fruit_id: str):
         fruit = (next(item for item in self.state["fruits"] if item.fruit_id == fruit_id))
