@@ -23,14 +23,10 @@ class Game:
         player = (next(item for item in self.state["players"] if item.fruit_id == player_id))
         self.state["players"].remove(player)
 
-
-game = Game()
-
-game.add_fruit("fruit1", 3, 4)
-game.add_fruit("fruit2", 6, 8)
-game.add_player("player1", 3, 6)
-game.add_player("player2", 2, 9)
-
-
+    def game_state_to_dict(self):
+        game_state_dict = {
+            "players": [player.to_dict() for player in self.state["players"]],
+            "fruits": [fruit.to_dict() for fruit in self.state["fruits"]]}
+        return game_state_dict
 
 

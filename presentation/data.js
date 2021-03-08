@@ -28,6 +28,20 @@ export function createGame(){
         screen: {x:10, y:10}
     }
 
+    function gameLoad(args){
+        let state = args["state"]
+       
+        for(const fruitId in state["fruits"]){
+            let fruit = state["fruits"][fruitId]
+            addFruit(Fruit(fruit.fruitId, fruit.fruitPosition.positionX, fruit.fruitPosition.positionY))
+        }
+
+        for(const playerId in state["players"]){
+            let player = state["players"][playerId]
+            addPlayer(Player(player.playerId, player.playerPosition.positionX, player.playerPosition.positionY))
+        }
+    }
+
     
     function addPlayer(player){
         state.players[player.playerId] = player.playerPosition
@@ -93,6 +107,7 @@ export function createGame(){
         addFruit,
         removeFruit,
         removePlayer,
+        gameLoad,
         checkPlayerAndFruitColision,
         state 
     }

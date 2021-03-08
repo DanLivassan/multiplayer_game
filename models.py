@@ -54,9 +54,9 @@ class Fruit(GameObject):
 
     def to_dict(self):
         return {
-            "FruitId": self.fruit_id,
+            "fruitId": self.fruit_id,
             "color": self.color,
-            "FruitPosition": {
+            "fruitPosition": {
                 "positionX": self.position["x"],
                 "positionY": self.position["y"]
             }
@@ -73,9 +73,9 @@ class Player(GameObject):
 
     def to_dict(self):
         return {
-            "PlayerId": self.player_id,
+            "playerId": self.player_id,
             "color": self.color,
-            "PlayerPosition": {
+            "playerPosition": {
                 "positionX": self.position["x"],
                 "positionY": self.position["y"]
             }

@@ -18,12 +18,20 @@
         const context  = screen.getContext("2d")
         var socket = io();
         const game = createGame()
-        game.addPlayer(Player("player1", 4, 5))
-        game.addPlayer(Player("player2", 3, 3))
-        game.addFruit(Fruit("fruit1", 2, 2))
-        game.addFruit(Fruit("fruit2", 9, 6))
+
+
         game.state.me.id = "player1"
         
+        
+        socket.on("connect", () => {
+            console.log(socket.id); 
+        });
+
+        socket.on("open_game", (arg) => {
+            game.gameLoad(arg)
+        });
+
+
         var keyboardListener = createKeyboardListener(game)
         keyboardListener.subscribe(game.movePlayer)
         renderScreen(context, game.state, requestAnimationFrame)
