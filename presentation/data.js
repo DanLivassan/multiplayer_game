@@ -28,9 +28,31 @@ export function createGame(){
         screen: {x:10, y:10}
     }
 
+    var map_arrows_to_action = {
+        "ArrowUp": "UP",
+        "ArrowDown": "DOWN",
+        "ArrowLeft": "LEFT",
+        "ArrowRight": "RIGHT",
+    }
+
+    const observers = []
+
+    function subscribe(observerFunction){
+        observers.push(observerFunction)
+    }
+
+    function notifyAll(command){
+        for (const observerFunction of observers){
+            observerFunction(command)
+        }
+    }
+
     function gameLoad(args){
+        
         let state = args["state"]
-       
+        //console.log(state)
+        this.state.players = {}
+        this.state.fruits = {}
         for(const fruitId in state["fruits"]){
             let fruit = state["fruits"][fruitId]
             addFruit(Fruit(fruit.fruitId, fruit.fruitPosition.positionX, fruit.fruitPosition.positionY))
@@ -86,7 +108,7 @@ export function createGame(){
             moveFunction()
         
             checkPlayerAndFruitColision(command.playerId)
-        } 
+        }
         
     }
 
@@ -97,6 +119,7 @@ export function createGame(){
             
             if (fruit.positionX == player.positionX && fruit.positionY == player.positionY){
                 removeFruit(fruitId)
+                notifyAll({"type":"colision", "playerId": playerId, "fruitId": fruitId}) 
             }
         }
     }
@@ -109,6 +132,8 @@ export function createGame(){
         removePlayer,
         gameLoad,
         checkPlayerAndFruitColision,
+        subscribe,
+        map_arrows_to_action,
         state 
     }
 }

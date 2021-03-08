@@ -1,4 +1,4 @@
-export default function renderScreen(context, state, requestAnimationFrame){  
+export default function renderScreen(context, state, requestAnimationFrame, currentPlayerId){  
     
     clearScreen(context)
     renderObjetcs(state.fruits, "green", context)
@@ -13,7 +13,14 @@ export default function renderScreen(context, state, requestAnimationFrame){
         
         for (const objectId in objects){
             let object = objects[objectId]
-            renderPixel(color, {X: object.positionX, Y: object.positionY}, context)
+            if (objectId!=currentPlayerId){
+
+                renderPixel(color, {X: object.positionX, Y: object.positionY}, context)
+            }
+            else{
+                renderPixel("yellow", {X: object.positionX, Y: object.positionY}, context)
+            }
+                
         }
     }
     
@@ -22,7 +29,7 @@ export default function renderScreen(context, state, requestAnimationFrame){
         context.fillRect(position.X, position.Y, 1,1)
     }
     requestAnimationFrame(()=>{
-        renderScreen(context, state, requestAnimationFrame)
+        renderScreen(context, state, requestAnimationFrame, currentPlayerId)
     })
 }
 

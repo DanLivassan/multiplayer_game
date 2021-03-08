@@ -20,21 +20,47 @@
         const game = createGame()
 
 
-        game.state.me.id = "player1"
         
         
+        socket.on("colision", ()=>{
+
+        })
         socket.on("connect", () => {
-            console.log(socket.id); 
+            game.state.me.id = socket.id
+            renderScreen(context, game.state, requestAnimationFrame, game.state.me.id)
         });
-
-        socket.on("open_game", (arg) => {
-            game.gameLoad(arg)
-        });
-
 
         var keyboardListener = createKeyboardListener(game)
         keyboardListener.subscribe(game.movePlayer)
-        renderScreen(context, game.state, requestAnimationFrame)
+        
+        keyboardListener.subscribe((command)=>{
+            let move = game.map_arrows_to_action[command["keyPressed"]]
+            move = typeof(move)=="string"?move:"No Action"
+            socket.emit("move_player", 
+            {
+                "move": game.map_arrows_to_action[command["keyPressed"]],
+                "playerId": command["playerId"]
+            })
+        })
+
+        game.subscribe((command)=>{
+            if (command["type"]=="colision"){
+                socket.emit("colision", {
+                    "playerId": command["playerId"],
+                    "fruitId": command["fruitId"],
+                })
+            }
+        })
+
+        
+
+        socket.on("load_game", (arg) => {
+            game.gameLoad(arg)
+        });
+
+        
+
+        
 
     </script>
 </body>
