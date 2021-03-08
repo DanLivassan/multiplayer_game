@@ -7,13 +7,16 @@
 </head>
 <body>
     <canvas id="screen" width="10" height="10"></canvas>
+    <script src="https://cdn.socket.io/3.1.1/socket.io.min.js" integrity="sha384-gDaozqUvc4HTgo8iZjwth73C6dDDeOJsAgpxBcMpZYztUfjHXpzrpdrHRdVp8ySO" crossorigin="anonymous"></script>
+
     <script type="module">
+        
         import {createGame, Player, Fruit} from './data.js'
         import createKeyboardListener from './input.js'
         import renderScreen from './renderer.js'
         const screen = document.getElementById("screen")
         const context  = screen.getContext("2d")
-
+        var socket = io();
         const game = createGame()
         game.addPlayer(Player("player1", 4, 5))
         game.addPlayer(Player("player2", 3, 3))
