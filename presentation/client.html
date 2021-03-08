@@ -6,10 +6,25 @@
     <link rel="stylesheet" href="main.css">
 </head>
 <body>
-<canvas id="screen" width="10" height="10"></canvas>
-<script src="data.js"></script>
-<script src="input.js"></script>
-<script src="renderer.js"></script>
+    <canvas id="screen" width="10" height="10"></canvas>
+    <script type="module">
+        import {createGame, Player, Fruit} from './data.js'
+        import createKeyboardListener from './input.js'
+        import renderScreen from './renderer.js'
+        const screen = document.getElementById("screen")
+        const context  = screen.getContext("2d")
 
+        const game = createGame()
+        game.addPlayer(Player("player1", 4, 5))
+        game.addPlayer(Player("player2", 3, 3))
+        game.addFruit(Fruit("fruit1", 2, 2))
+        game.addFruit(Fruit("fruit2", 9, 6))
+        game.state.me.id = "player1"
+        
+        var keyboardListener = createKeyboardListener(game)
+        keyboardListener.subscribe(game.movePlayer)
+        renderScreen(context, game.state, requestAnimationFrame)
+
+    </script>
 </body>
 </html>

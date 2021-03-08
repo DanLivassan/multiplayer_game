@@ -1,6 +1,4 @@
-keyboard_listener = createKeyboardListener()
-keyboard_listener.subscribe(game.movePlayer)
-function createKeyboardListener(){
+export default function createKeyboardListener(game){
 
     const state = {
         observers: []
@@ -19,7 +17,7 @@ function createKeyboardListener(){
     
 
     function handleKeyDownEvent(event){
-        command = {keyPressed:event.key, playerId:game.state.me.id}
+        let command = {keyPressed:event.key, playerId: game.state.me.id}
         notifyAll(command)
     }
 
